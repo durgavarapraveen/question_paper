@@ -1,0 +1,20 @@
+# Use Node.js base image
+FROM node:18
+
+# Set working directory
+WORKDIR /app
+
+# Copy only package.json first for better caching
+COPY package.json package-lock.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy rest of the frontend code
+COPY . .
+
+# Expose port 5173 for Vite
+EXPOSE 5173
+
+# Run Vite in host mode for fast refresh
+CMD ["npm", "run", "dev", "--", "--host"]

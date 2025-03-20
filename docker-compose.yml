@@ -1,0 +1,33 @@
+version: "2"
+
+services:
+  backend:
+    build: ./server
+    container_name: fastapi_backend
+    ports:
+      - "8000:8000"
+    env_file:
+      - server/.env
+    depends_on:
+      - db
+
+  frontend:
+    build: ./client
+    container_name: reactjs_frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    ports:
+      - "5432:5432"
+    environment:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
